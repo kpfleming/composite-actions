@@ -1,0 +1,19 @@
+name: "Clean up container image for PR"
+inputs:
+  image_registry:
+    required: true
+  registry_account:
+    required: true
+  registry_token:
+    required: true
+  repo_name:
+    required: true
+  tag_prefix:
+    required: true
+runs:
+  using: "composite"
+  steps:
+  - name: delete image tag (Quay)
+    run: 'curl -s -X DELETE -H "Authorization: Bearer ${{ inputs.registry_token }}" https://quay.io/api/v1/repository/${{ inputs.registry_account }}/${{ inputs.repo_name }}/tag/${{ inputs.tag_prefix }}pr${{ github.event.pull_request.number }}'
+    shell: bash
+    if: inputs.image_registry == 'quay.io'
