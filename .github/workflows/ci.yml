@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  preflight:
+    runs-on: ubuntu-20.04
+    outputs:
+      versions: ${{ env.versions }}
+    steps:
+    - uses: actions/checkout@v3
+    - run: cat workflow-support/pdns-versions >> $GITHUB_OUTPUT
+      shell: bash
+  ci-image:
+    runs-on: ubuntu-20.04
+    needs:
+    - preflight
+    strategy:
+      matrix:
+        pdns: ${{ needs.preflight.outputs.versions }}
+    steps:
+    - run: echo ${{ matrix.pdns }}
+      shell: bash
