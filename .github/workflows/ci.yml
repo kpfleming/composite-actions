@@ -9,13 +9,13 @@ jobs:
   preflight:
     runs-on: ubuntu-20.04
     outputs:
-      versions: ${{ steps.get_versions.outputs.versions }}
+      versions: ${{ fromJson(steps.get_versions.outputs.versions).pdns }}
     steps:
     - uses: actions/checkout@v3
     - id: get_versions
       run: cat workflow-support/pdns-versions >> $GITHUB_OUTPUT
       shell: bash
-    - run: echo ${{ steps.get_versions.outputs.versions }}
+    - run: echo ${{ fromJson(steps.get_versions.outputs.versions).pdns }}
       shell: bash
   ci-image:
     runs-on: ubuntu-20.04
