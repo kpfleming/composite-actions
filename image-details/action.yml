@@ -10,5 +10,5 @@ runs:
   using: "composite"
   steps:
   - id: repo_name
-    run: echo "name=name::${GITHUB_REPOSITORY##*/}" >> $GITHUB_OUTPUT
+    run: echo "name=${GITHUB_REPOSITORY##*/}" >> $GITHUB_OUTPUT
     shell: bash
