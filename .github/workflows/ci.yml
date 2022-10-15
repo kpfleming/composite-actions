@@ -8,12 +8,12 @@ on:
 jobs:
   preflight:
     runs-on: ubuntu-20.04
+    outputs:
+      pdns: ${{ fromJSON(steps.get_versions.outputs.versions).pdns }}
     steps:
     - uses: actions/checkout@v3
     - id: get_versions
       run: cat workflow-support/pdns-versions.json >> $GITHUB_OUTPUT
-      shell: bash
-    - run: echo ${{ fromJSON(steps.get_versions.outputs.versions).pdns }}
       shell: bash
   ci-image:
     runs-on: ubuntu-20.04
@@ -21,7 +21,7 @@ jobs:
     - preflight
     strategy:
       matrix:
-        pdns: ${{ needs.preflight.outputs.versions }}
+        pdns: ${{ needs.preflight.outputs.pdns }}
     steps:
     - run: echo ${{ matrix.pdns }}
       shell: bash
