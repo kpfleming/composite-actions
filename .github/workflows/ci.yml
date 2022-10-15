@@ -9,7 +9,7 @@ jobs:
   preflight:
     runs-on: ubuntu-20.04
     outputs:
-      pdns: ${{ fromJSON(steps.get_versions.outputs.versions).pdns }}
+      versions: ${{ steps.get_versions.outputs.versions }}
     steps:
     - uses: actions/checkout@v3
     - id: get_versions
@@ -21,7 +21,7 @@ jobs:
     - preflight
     strategy:
       matrix:
-        pdns: ${{ needs.preflight.outputs.pdns }}
+        pdns: ${{ fromJSON(needs.preflight.outputs.versions).pdns }}
     steps:
     - run: echo ${{ matrix.pdns }}
       shell: bash
