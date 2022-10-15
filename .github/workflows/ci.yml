@@ -9,10 +9,11 @@ jobs:
   preflight:
     runs-on: ubuntu-20.04
     outputs:
-      versions: ${{ env.versions }}
+      versions: ${{ steps.versions.output.versions }}
     steps:
     - uses: actions/checkout@v3
-    - run: cat workflow-support/pdns-versions >> $GITHUB_OUTPUT
+    - id: versions
+      run: cat workflow-support/pdns-versions >> $GITHUB_OUTPUT
       shell: bash
   ci-image:
     runs-on: ubuntu-20.04
