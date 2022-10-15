@@ -1,4 +1,4 @@
-name: "Clean up container image for PR"
+name: "Delete container image for PR"
 inputs:
   image_registry:
     required: true
