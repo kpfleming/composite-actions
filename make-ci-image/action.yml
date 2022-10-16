@@ -10,7 +10,7 @@ inputs:
     required: true
   registry_password:
     required: true
-  hash_files:
+  files_hash:
     required: true
   build_args:
     required: false
@@ -22,7 +22,7 @@ runs:
     uses: actions/cache@v3
     with:
       path: workflow-support/make_ci_image.sh
-      key: ${{ github.ref_name }}-${{ hashfiles(fromJSON(inputs.hash_files)) }}
+      key: ${{ github.ref_name }}-${{ inputs.files_hash }}
   - name: build image
     if: (steps.imagefiles.outputs.cache-hit != 'true') || (github.event_name == 'schedule')
     run: workflow-support/make_ci_image.sh ${{ inputs.base_image }} ${{ inputs.image_name }} ${{ inputs.build_args }}
