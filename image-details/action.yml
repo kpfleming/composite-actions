@@ -34,6 +34,6 @@ runs:
     run: echo "name=${GITHUB_REPOSITORY##*/}" >> $GITHUB_OUTPUT
     shell: bash
   - id: image_hash
-    run: echo "hash=$(skopeo inspect ${{ inputs.base_image_registry }}/${{ inputs.base_image_registry_account }}/${{ inputs.base_image }} --format '{{.Digest}}')" >> $GITHUB_OUTPUT
+    run: echo "hash=$(skopeo inspect docker://${{ inputs.base_image_registry }}/${{ inputs.base_image_registry_account }}/${{ inputs.base_image }} --format '{{.Digest}}')" >> $GITHUB_OUTPUT
     shell: bash
     if: inputs.base_image != ''
