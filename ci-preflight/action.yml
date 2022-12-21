@@ -1,9 +1,12 @@
 name: "Preflight checks for CI"
+inputs:
+  tag_prefix:
+    required: false
 outputs:
   need_image:
     value: ${{ (steps.skip_check.outputs.image_files == 'true') || (github.event_name == 'schedule') }}
   image_tag:
-    value: ${{ steps.main.outputs.image_tag }}${{ steps.pr.outputs.image_tag }}
+    value: ${{ inputs.tag_prefix }}${{ steps.main.outputs.image_tag }}${{ steps.pr.outputs.image_tag }}
 runs:
   using: "composite"
   steps:
