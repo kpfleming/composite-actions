@@ -13,7 +13,7 @@ inputs:
     required: false
     default: km6g-ci-images
   base_image:
-    required: false
+    required: true
 outputs:
   image_registry:
     value: ${{ inputs.image_registry }}
@@ -36,4 +36,3 @@ runs:
   - id: image_hash
     run: echo "hash=$(skopeo inspect docker://${{ inputs.base_image_registry }}/${{ inputs.base_image_registry_account }}/${{ inputs.base_image }} --format '{{.Digest}}')" >> $GITHUB_OUTPUT
     shell: bash
-    if: inputs.base_image != ''

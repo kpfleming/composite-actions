@@ -2,8 +2,6 @@ name: "Make CI Image"
 inputs:
   base_image:
     required: true
-  base_image_hash:
-    required: false
   image_name:
     required: true
   image_registry:
@@ -12,28 +10,17 @@ inputs:
     required: true
   registry_password:
     required: true
-  files_hash:
-    required: true
   build_args:
     required: false
 runs:
   using: "composite"
   steps:
-  - name: check cache for previous image builds
-    id: imagefiles
-    uses: actions/cache@v3
-    with:
-      path: workflow-support/make_ci_image.sh
-      key: ${{ github.ref_name }}-${{ inputs.files_hash }}-${{ inputs.base_image_hash }}
   - name: build image
-    if: (steps.imagefiles.outputs.cache-hit != 'true') || (github.event_name == 'schedule')
     run: workflow-support/make_ci_image.sh ${{ inputs.base_image }} ${{ inputs.image_name }} ${{ inputs.build_args }}
     shell: bash
   - name: login to registry
-    if: (steps.imagefiles.outputs.cache-hit != 'true') || (github.event_name == 'schedule')
     run: buildah login -u="${{ inputs.registry_username }}" -p="${{ inputs.registry_password }}" ${{ inputs.image_registry }}
     shell: bash
   - name: publish image to registry
-    if: (steps.imagefiles.outputs.cache-hit != 'true') || (github.event_name == 'schedule')
     run: buildah push ${{ inputs.image_name }}
     shell: bash

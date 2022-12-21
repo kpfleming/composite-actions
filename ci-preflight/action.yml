@@ -1,26 +1,30 @@
 name: "Preflight checks for CI"
 inputs:
+  base_image_hash:
+    required: true
+  files_hash:
+    required: true
   tag_prefix:
     required: false
 outputs:
   need_image:
-    value: ${{ (steps.skip_check.outputs.image_files == 'true') || (github.event_name == 'schedule') }}
+    value: ${{ (steps.cache_check.outputs.cache-hit != 'true') || (github.event_name == 'schedule') }}
   image_tag:
     value: ${{ inputs.tag_prefix }}${{ steps.main.outputs.image_tag }}${{ steps.pr.outputs.image_tag }}
 runs:
   using: "composite"
   steps:
-  - uses: actions/checkout@v3
-  - id: skip_check
-    uses: dorny/paths-filter@v2
+  - id: cache_check
+    uses: actions/cache@v3
     with:
-      filters: workflow-support/image_files.yml
+      path: workflow-support/make_ci_image.sh
+      key: ${{ github.ref_name }}-${{ inputs.files_hash }}-${{ inputs.base_image_hash }}
     if: github.event_name != 'schedule'
   - id: main
     run: echo "image_tag=main" >> $GITHUB_OUTPUT
     shell: bash
-    if: (github.event_name != 'pull_request') || (steps.skip_check.outputs.image_files != 'true')
+    if: (github.event_name != 'pull_request') || (steps.cache_check.outputs.cache-hit != 'true')
   - id: pr
     run: echo "image_tag=pr${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
     shell: bash
-    if: (github.event_name == 'pull_request') && (steps.skip_check.outputs.image_files == 'true')
+    if: (github.event_name == 'pull_request') && (steps.cache_check.outputs.cache-hit == 'true')
