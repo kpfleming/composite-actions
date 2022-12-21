@@ -1,14 +1,39 @@
 name: "Image Details"
+inputs:
+  image_registry:
+    required: false
+    default: quay.io
+  registry_account:
+    required: false
+    default: km6g-ci-images
+  base_image_registry:
+    required: false
+    default: quay.io
+  base_image_registry_account:
+    required: false
+    default: km6g-ci-images
+  base_image:
+    required: false
 outputs:
   image_registry:
-    value: quay.io
+    value: ${{ inputs.image_registry }}
   registry_account:
-    value: km6g-ci-images
+    value: ${{ inputs.registry_account }}
   repo_name:
     value: ${{ steps.repo_name.outputs.name }}
+  image_base:
+    value: ${{ inputs.image_registry }}/${{ inputs.registry_account }}/${{ steps.repo_name.outputs.name }}
+  base_image:
+    value: ${{ inputs.base_image_registry }}/${{ inputs.base_image_registry_account }}/${{ inputs.base_image }}
+  base_image_hash:
+    value: ${{ steps.image_hash.outputs.hash }}
 runs:
   using: "composite"
   steps:
   - id: repo_name
     run: echo "name=${GITHUB_REPOSITORY##*/}" >> $GITHUB_OUTPUT
     shell: bash
+  - id: image_hash
+    run: echo "hash=$(skopeo inspect ${{ inputs.base_image_registry }}/${{ inputs.base_image_registry_account }}/${{ inputs.base_image }} --format '{{.Digest}}')" >> $GITHUB_OUTPUT
+    shell: bash
+    if: inputs.base_image != ''
