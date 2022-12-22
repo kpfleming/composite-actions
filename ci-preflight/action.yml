@@ -8,23 +8,36 @@ inputs:
     required: false
 outputs:
   need_image:
-    value: ${{ (steps.cache_check.outputs.cache-hit != 'true') || (github.event_name == 'schedule') }}
+    value: ${{ steps.main-need-image.outputs.need_image }}${{ steps.pr-need-image.outputs.need_image }}
   image_tag:
-    value: ${{ inputs.tag_prefix }}${{ steps.main.outputs.image_tag }}${{ steps.pr.outputs.image_tag }}
+    value: ${{ inputs.tag_prefix }}${{ steps.main-tag.outputs.tag }}${{ steps.pr-tag.outputs.tag }}
 runs:
   using: "composite"
   steps:
-  - id: cache_check
+  - id: main_cache_check
+    uses: actions/cache@v3
+    with:
+      path: workflow-support/make_ci_image.sh
+      key: main-${{ inputs.files_hash }}-${{ inputs.base_image_hash }}
+  - id: pr_cache_check
     uses: actions/cache@v3
     with:
       path: workflow-support/make_ci_image.sh
       key: ${{ github.ref_name }}-${{ inputs.files_hash }}-${{ inputs.base_image_hash }}
-    if: github.event_name != 'schedule'
-  - id: main
-    run: echo "image_tag=main" >> $GITHUB_OUTPUT
+    if: github.event_name == 'pull_request'
+  - id: main-tag
+    run: echo "tag=main" >> $GITHUB_OUTPUT
     shell: bash
-    if: (github.event_name != 'pull_request') || (steps.cache_check.outputs.cache-hit != 'true')
-  - id: pr
-    run: echo "image_tag=pr${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+    if: (github.event_name != 'pull_request') || (steps.main_cache_check.outputs.cache-hit == 'true')
+  - id: pr-tag
+    run: echo "tag=pr${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
     shell: bash
-    if: (github.event_name == 'pull_request') && (steps.cache_check.outputs.cache-hit == 'true')
+    if: (github.event_name == 'pull_request') && (steps.main_cache_check.outputs.cache-hit != 'true')
+  - id: main-need-image
+    run: echo "need_image=true" >> $GITHUB_OUTPUT
+    shell: bash
+    if: (github.event_name == 'schedule') || ((github.event_name != 'pull_request') && (steps.main_cache_check.outputs.cache-hit != 'true'))
+  - id: pr-need-image
+    run: echo "need_image=true" >> $GITHUB_OUTPUT
+    shell: bash
+    if: (github.event_name == 'pull_request') && (steps.pr-tag.outputs.tag != '') && (steps.pr_cache_check.outputs.cache-hit != 'true')
