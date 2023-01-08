@@ -2,11 +2,15 @@ name: "Preflight checks for CI"
 inputs:
   base_image_hash:
     required: true
+  ci_paths:
+    required: true
   files_hash:
     required: true
   tag_prefix:
     required: false
 outputs:
+  need_ci:
+    value: ${{ steps.paths.outputs.paths == 'true' }}
   need_image:
     value: ${{ steps.main-need-image.outputs.need_image }}${{ steps.pr-need-image.outputs.need_image }}
   image_tag:
@@ -14,6 +18,10 @@ outputs:
 runs:
   using: "composite"
   steps:
+  - id: paths
+    uses: dorny/paths-filter@v2
+    with:
+      filters: ${{ inputs.ci_paths }}
   - id: main_cache_check
     uses: actions/cache@v3
     with:
