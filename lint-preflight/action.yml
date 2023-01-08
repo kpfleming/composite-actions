@@ -1,0 +1,14 @@
+name: "Preflight checks for Lint"
+inputs:
+  lint_paths:
+    required: true
+outputs:
+  need_lint:
+    value: ${{ steps.paths.outputs.paths == 'true' }}
+runs:
+  using: "composite"
+  steps:
+  - id: paths
+    uses: dorny/paths-filter@v2
+    with:
+      filters: ${{ inputs.lint_paths }}
