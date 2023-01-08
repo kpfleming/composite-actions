@@ -1,0 +1,10 @@
+name: "Run CI tests using tox"
+inputs:
+  python:
+    required: true
+runs:
+  using: "composite"
+  steps:
+  - name: run CI tests
+    run: tox -e${{ inputs.python }}-ci-action --workdir /root/tox
+    shell: bash
