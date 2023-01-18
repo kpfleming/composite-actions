@@ -1,0 +1,7 @@
+name: "Run linter checks using hatch"
+runs:
+  using: "composite"
+  steps:
+  - name: run lint tests
+    run: hatch run lint:lint-action
+    shell: bash
