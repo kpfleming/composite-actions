@@ -3,5 +3,5 @@ runs:
   using: "composite"
   steps:
   - name: run lint tests
-    run: tox -elint-action --workdir /root/tox
+    run: tox run -e lint-action
     shell: bash

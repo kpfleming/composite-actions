@@ -6,5 +6,5 @@ runs:
   using: "composite"
   steps:
   - name: run CI tests
-    run: tox -e${{ inputs.python }}-ci-action --workdir /root/tox
+    run: tox run -e${{ inputs.python }}-ci-action
     shell: bash

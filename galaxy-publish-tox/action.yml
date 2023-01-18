@@ -8,7 +8,7 @@ runs:
   using: "composite"
   steps:
   - name: publish collection
-    run: tox -epublish-action --workdir /root/tox
+    run: tox run -e publish-action
     shell: bash
     env:
       ANSIBLE_GALAXY_TOKEN: ${{ inputs.galaxy_token }}
