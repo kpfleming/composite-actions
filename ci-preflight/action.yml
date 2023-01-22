@@ -46,12 +46,12 @@ runs:
   - id: main-need-image
     run: |
       echo "need_image=true" >> $GITHUB_OUTPUT
-      echo "cache_key=${{ steps.main_cache_check.outputs.key }}" >> $GITHUB_OUTPUT
+      echo "cache_key=main-${{ inputs.files_hash }}-${{ inputs.base_image_hash }}" >> $GITHUB_OUTPUT
     shell: bash
     if: (github.event_name == 'schedule') || ((github.event_name != 'pull_request') && (steps.main_cache_check.outputs.cache-hit != 'true'))
   - id: pr-need-image
     run: |
       echo "need_image=true" >> $GITHUB_OUTPUT
-      echo "cache_key=${{ steps.pr_cache_check.outputs.key }}" >> $GITHUB_OUTPUT
+      echo "cache_key=${{ github.ref_name }}-${{ inputs.files_hash }}-${{ inputs.base_image_hash }}" >> $GITHUB_OUTPUT
     shell: bash
     if: (github.event_name == 'pull_request') && (steps.pr-tag.outputs.tag != '') && (steps.pr_cache_check.outputs.cache-hit != 'true')
