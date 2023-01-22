@@ -4,6 +4,8 @@ inputs:
     required: true
   image_name:
     required: true
+  image_cache_key:
+    required: true
   image_registry:
     required: true
   registry_username:
@@ -24,3 +26,8 @@ runs:
   - name: publish image to registry
     run: buildah push ${{ inputs.image_name }}
     shell: bash
+  - name: record image key in cache
+    uses: actions/cache/save@v3
+    with:
+      path: workflow-support/make_ci_image.sh
+      key: ${{ inputs.image_cache_key }}
