@@ -1,7 +1,13 @@
-name: "Run linter checks using hatch"
+name: "Run linter checks using Hatch"
 runs:
   using: "composite"
   steps:
+  - name: build wheel
+    run: hatch build -t wheel
+    shell: bash
+  - name: install project
+    run: hatch run lint:pip install dist/*.whl
+    shell: bash
   - name: run lint tests
     run: hatch run lint:lint-action
     shell: bash
