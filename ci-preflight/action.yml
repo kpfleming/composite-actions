@@ -27,11 +27,13 @@ runs:
   - id: main_cache_check
     uses: actions/cache/restore@v3
     with:
+      lookup-only: true
       path: workflow-support/make_ci_image.sh
       key: main-${{ inputs.files_hash }}-${{ inputs.base_image_hash }}
   - id: pr_cache_check
     uses: actions/cache/restore@v3
     with:
+      lookup-only: true
       path: workflow-support/make_ci_image.sh
       key: ${{ github.ref_name }}-${{ inputs.files_hash }}-${{ inputs.base_image_hash }}
     if: github.event_name == 'pull_request'
