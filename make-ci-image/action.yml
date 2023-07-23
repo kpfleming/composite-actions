@@ -17,6 +17,11 @@ inputs:
 runs:
   using: "composite"
   steps:
+  - name: remove unwanted software
+    run: |
+      sudo rm -rf /usr/share/dotnet
+      sudo rm -rf /usr/local/lib/android
+    shell: bash
   - name: build image
     run: workflow-support/make_ci_image.sh ${{ inputs.base_image }} ${{ inputs.image_name }} ${{ inputs.build_args }}
     shell: bash
