@@ -1,6 +1,38 @@
 version: 2
 updates:
   - package-ecosystem: "github-actions"
-    directory: "/"
+    directory: "ci-preflight"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "github-actions"
+    directory: "ci-tox"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "github-actions"
+    directory: "delete-pr-image"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "github-actions"
+    directory: "galaxy-publish-tox"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "github-actions"
+    directory: "image-details"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "github-actions"
+    directory: "lint-hatch"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "github-actions"
+    directory: "lint-preflight"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "github-actions"
+    directory: "lint-tox"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "github-actions"
+    directory: "make-ci-image"
     schedule:
       interval: "weekly"
