@@ -21,7 +21,7 @@ runs:
   using: "composite"
   steps:
   - id: paths
-    uses: dorny/paths-filter@v2
+    uses: dorny/paths-filter@v3
     with:
       filters: ${{ inputs.ci_paths }}
   - id: main_cache_check
