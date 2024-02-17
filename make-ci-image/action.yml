@@ -32,7 +32,7 @@ runs:
     run: buildah push ${{ inputs.image_name }}
     shell: bash
   - name: record image key in cache
-    uses: actions/cache/save@v3
+    uses: actions/cache/save@v4
     with:
       path: workflow-support/make_ci_image.sh
       key: ${{ inputs.image_cache_key }}
