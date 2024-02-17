@@ -25,13 +25,13 @@ runs:
     with:
       filters: ${{ inputs.ci_paths }}
   - id: main_cache_check
-    uses: actions/cache/restore@v3
+    uses: actions/cache/restore@v4
     with:
       lookup-only: true
       path: workflow-support/make_ci_image.sh
       key: main-${{ inputs.files_hash }}-${{ inputs.base_image_hash }}
   - id: pr_cache_check
-    uses: actions/cache/restore@v3
+    uses: actions/cache/restore@v4
     with:
       lookup-only: true
       path: workflow-support/make_ci_image.sh
