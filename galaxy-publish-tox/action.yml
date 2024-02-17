@@ -21,10 +21,10 @@ runs:
       ANSIBLE_GALAXY_TOKEN: ${{ inputs.galaxy_token }}
       TAG: ${{ inputs.tag }}
   - id: collection_namespace
-    run: "echo namespace=$(yq -r .namespace src/galaxy.yml)" >> $GITHUB_OUTPUT
+    run: echo "namespace=$(yq -r .namespace src/galaxy.yml)" >> $GITHUB_OUTPUT
     shell: bash
   - id: collection_name
-    run: "echo name=$(yq -r .name src/galaxy.yml)" >> $GITHUB_OUTPUT
+    run: echo "name=$(yq -r .name src/galaxy.yml)" >> $GITHUB_OUTPUT
     shell: bash
   - name: store collection as artifact
     uses: actions/upload-artifact@v4
