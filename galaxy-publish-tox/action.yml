@@ -4,6 +4,13 @@ inputs:
     required: true
   tag:
     required: true
+outputs:
+  collection_namespace:
+    value: ${{ steps.collection_namespace.outputs.namespace }}
+  collection_name:
+    value: ${{ steps.collection_name.outputs.name }}
+  collection_tarball:
+    value: ${{ steps.collection_namespace.outputs.namespace }}-${{ steps.collection_name.outputs.name }}-${{ inputs.tag }}.tar.gz
 runs:
   using: "composite"
   steps:
@@ -13,3 +20,15 @@ runs:
     env:
       ANSIBLE_GALAXY_TOKEN: ${{ inputs.galaxy_token }}
       TAG: ${{ inputs.tag }}
+  - id: collection_namespace
+    run: "echo namespace=$(yq -r .namespace src/galaxy.yml)" >> $GITHUB_OUTPUT
+    shell: bash
+  - id: collection_name
+    run: "echo name=$(yq -r .name src/galaxy.yml)" >> $GITHUB_OUTPUT
+    shell: bash
+  - name: store collection as artifact
+    uses: actions/upload-artifact@v4
+    with:
+      name: collection
+      retention-days: 2
+      path: ${{ steps.collection_namespace.outputs.namespace }}-${{ steps.collection_name.outputs.name }}-${{ inputs.tag }}.tar.gz
