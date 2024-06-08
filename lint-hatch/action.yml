@@ -6,7 +6,7 @@ runs:
     run: hatch build -t wheel
     shell: bash
   - name: install project
-    run: hatch run lint:pip install dist/*.whl
+    run: hatch run lint:uv pip install dist/*.whl
     shell: bash
   - name: run lint tests
     run: hatch run lint:lint-action
