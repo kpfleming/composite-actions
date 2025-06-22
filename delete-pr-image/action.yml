@@ -17,3 +17,7 @@ runs:
     run: 'curl -s -X DELETE -H "Authorization: Bearer ${{ inputs.registry_token }}" https://quay.io/api/v1/repository/${{ inputs.registry_account }}/${{ inputs.repo_name }}/tag/${{ inputs.tag_prefix }}pr${{ github.event.pull_request.number }}'
     shell: bash
     if: (inputs.image_registry == 'quay.io') && (inputs.registry_token != '')
+  - name: delete image tag (Forge)
+    run: 'curl -s -X DELETE -H "Authorization: token ${{ inputs.registry_token }}" https://forge.km6g.us/api/v1/packages/${{ inputs.registry_account }}/container/${{ inputs.repo_name }}/${{ inputs.tag_prefix }}pr${{ github.event.pull_request.number }}'
+    shell: bash
+    if: (inputs.image_registry == 'forge.km6g.us') && (inputs.registry_token != '')
