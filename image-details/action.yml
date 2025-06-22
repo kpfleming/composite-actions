@@ -2,16 +2,16 @@ name: "Image Details"
 inputs:
   image_registry:
     required: false
-    default: quay.io
+    default: forge.km6g.us
   registry_account:
     required: false
-    default: km6g-ci-images
+    default: km6g
   base_image_registry:
     required: false
-    default: quay.io
+    default: forge.km6g.us
   base_image_registry_account:
     required: false
-    default: km6g-ci-images
+    default: km6g
   base_image:
     required: true
 outputs:
