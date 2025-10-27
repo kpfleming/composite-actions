@@ -27,7 +27,7 @@ runs:
     run: echo "name=$(yq -r .name src/galaxy.yml)" >> $GITHUB_OUTPUT
     shell: bash
   - name: store collection as artifact
-    uses: actions/upload-artifact@v4
+    uses: actions/upload-artifact@v5
     with:
       name: collection
       retention-days: 2
