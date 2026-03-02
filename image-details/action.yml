@@ -2,13 +2,13 @@ name: "Image Details"
 inputs:
   image_registry:
     required: false
-    default: forge.origins.km6g.us
+    default: forge.km6g.us
   registry_account:
     required: false
     default: km6g
   base_image_registry:
     required: false
-    default: forge.origins.km6g.us
+    default: forge.km6g.us
   base_image_registry_account:
     required: false
     default: km6g

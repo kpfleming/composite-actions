@@ -1,4 +1,4 @@
-[Iname: "Delete container image for PR"
+name: "Delete container image for PR"
 inputs:
   image_registry:
     required: true
@@ -14,6 +14,6 @@ runs:
   using: "composite"
   steps:
   - name: delete image tag
-    run: 'curl -s -X DELETE -H "Authorization: token ${{ inputs.registry_token }}" https://forge.origins.km6g.us/api/v1/packages/${{ inputs.registry_account }}/container/${{ inputs.repo_name }}/${{ inputs.tag_prefix }}pr${{ github.event.pull_request.number }}'
+    run: 'curl -s -X DELETE -H "Authorization: token ${{ inputs.registry_token }}" https://forge.km6g.us/api/v1/packages/${{ inputs.registry_account }}/container/${{ inputs.repo_name }}/${{ inputs.tag_prefix }}pr${{ github.event.pull_request.number }}'
     shell: bash
     if: inputs.registry_token != ''
