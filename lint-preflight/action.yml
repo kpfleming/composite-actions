@@ -9,6 +9,6 @@ runs:
   using: "composite"
   steps:
   - id: paths
-    uses: dorny/paths-filter@v3
+    uses: dorny/paths-filter@v4
     with:
       filters: ${{ inputs.lint_paths }}
