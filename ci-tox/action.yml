@@ -6,5 +6,7 @@ runs:
   using: "composite"
   steps:
   - name: run CI tests
-    run: tox run -e${{ inputs.python }}-ci-action
+    run: tox run -e${INPUTS_PYTHON}-ci-action
     shell: bash
+    env:
+      INPUTS_PYTHON: ${{ inputs.python }}

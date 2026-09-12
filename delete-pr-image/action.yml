@@ -14,6 +14,11 @@ runs:
   using: "composite"
   steps:
   - name: delete image tag
-    run: 'curl -s -X DELETE -H "Authorization: token ${{ inputs.registry_token }}" https://forge.km6g.us/api/v1/packages/${{ inputs.registry_account }}/container/${{ inputs.repo_name }}/${{ inputs.tag_prefix }}pr${{ github.event.pull_request.number }}'
+    run: 'curl -s -X DELETE -H "Authorization: token ${INPUTS_REGISTRY_TOKEN}" https://forge.km6g.us/api/v1/packages/${INPUTS_REGISTRY_ACCOUNT}/container/${INPUTS_REPO_NAME}/${INPUTS_TAG_PREFIX}pr${{ github.event.pull_request.number }}'
     shell: bash
     if: inputs.registry_token != ''
+    env:
+      INPUTS_REGISTRY_TOKEN: ${{ inputs.registry_token }}
+      INPUTS_REGISTRY_ACCOUNT: ${{ inputs.registry_account }}
+      INPUTS_REPO_NAME: ${{ inputs.repo_name }}
+      INPUTS_TAG_PREFIX: ${{ inputs.tag_prefix }}

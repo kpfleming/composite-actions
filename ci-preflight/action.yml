@@ -21,17 +21,17 @@ runs:
   using: "composite"
   steps:
   - id: paths
-    uses: dorny/paths-filter@v4
+    uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
     with:
       filters: ${{ inputs.ci_paths }}
   - id: main_cache_check
-    uses: actions/cache/restore@v6
+    uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
     with:
       lookup-only: true
       path: workflow-support/make_ci_image.sh
       key: main-${{ inputs.files_hash }}-${{ inputs.base_image_hash }}
   - id: pr_cache_check
-    uses: actions/cache/restore@v6
+    uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
     with:
       lookup-only: true
       path: workflow-support/make_ci_image.sh
@@ -48,12 +48,18 @@ runs:
   - id: main-need-image
     run: |
       echo "need_image=true" >> $GITHUB_OUTPUT
-      echo "cache_key=main-${{ inputs.files_hash }}-${{ inputs.base_image_hash }}" >> $GITHUB_OUTPUT
+      echo "cache_key=main-${INPUTS_FILES_HASH}-${INPUTS_BASE_IMAGE_HASH}" >> $GITHUB_OUTPUT
     shell: bash
     if: (github.event_name == 'schedule') || ((github.event_name != 'pull_request') && (steps.main_cache_check.outputs.cache-hit != 'true'))
+    env:
+      INPUTS_FILES_HASH: ${{ inputs.files_hash }}
+      INPUTS_BASE_IMAGE_HASH: ${{ inputs.base_image_hash }}
   - id: pr-need-image
     run: |
       echo "need_image=true" >> $GITHUB_OUTPUT
-      echo "cache_key=${{ github.ref_name }}-${{ inputs.files_hash }}-${{ inputs.base_image_hash }}" >> $GITHUB_OUTPUT
+      echo "cache_key=${GITHUB_REF_NAME}-${INPUTS_FILES_HASH}-${INPUTS_BASE_IMAGE_HASH}" >> $GITHUB_OUTPUT
     shell: bash
     if: (github.event_name == 'pull_request') && (steps.pr-tag.outputs.tag != '') && (steps.pr_cache_check.outputs.cache-hit != 'true')
+    env:
+      INPUTS_FILES_HASH: ${{ inputs.files_hash }}
+      INPUTS_BASE_IMAGE_HASH: ${{ inputs.base_image_hash }}

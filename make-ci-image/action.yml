@@ -18,16 +18,26 @@ runs:
   using: "composite"
   steps:
   - name: build image
-    run: workflow-support/make_ci_image.sh ${{ inputs.base_image }} ${{ inputs.image_name }} ${{ inputs.build_args }}
+    run: workflow-support/make_ci_image.sh ${INPUTS_BASE_IMAGE} ${INPUTS_IMAGE_NAME} ${INPUTS_BUILD_ARGS}
     shell: bash
+    env:
+      INPUTS_BASE_IMAGE: ${{ inputs.base_image }}
+      INPUTS_IMAGE_NAME: ${{ inputs.image_name }}
+      INPUTS_BUILD_ARGS: ${{ inputs.build_args }}
   - name: login to registry
-    run: buildah login -u="${{ inputs.registry_username }}" -p="${{ inputs.registry_password }}" ${{ inputs.image_registry }}
+    run: buildah login -u="${INPUTS_REGISTRY_USERNAME}" -p="${INPUTS_REGISTRY_PASSWORD}" ${INPUTS_IMAGE_REGISTRY}
     shell: bash
+    env:
+      INPUTS_REGISTRY_USERNAME: ${{ inputs.registry_username }}
+      INPUTS_REGISTRY_PASSWORD: ${{ inputs.registry_password }}
+      INPUTS_IMAGE_REGISTRY: ${{ inputs.image_registry }}
   - name: publish image to registry
-    run: buildah push ${{ inputs.image_name }}
+    run: buildah push ${INPUTS_IMAGE_NAME}
     shell: bash
+    env:
+      INPUTS_IMAGE_NAME: ${{ inputs.image_name }}
   - name: record image key in cache
-    uses: actions/cache/save@v6
+    uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
     with:
       path: workflow-support/make_ci_image.sh
       key: ${{ inputs.image_cache_key }}
